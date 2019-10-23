@@ -34,44 +34,55 @@ On first run, `jsvu` prompts you for your operating system and architecture, and
 
 To update the installed JavaScript engines later on, just run `jsvu` again.
 
-## Supported engines
+## Supported engines per OS
 
-| JavaScript engine         | Binary name               | `mac64`             | `win32`         | `win64`              | `linux32` | `linux64` |
-| ------------------------- | ------------------------- | ------------------- | --------------- | -------------------- | --------- | --------- |
-| [**Chakra**][ch]          | `chakra` or `ch`          | ✅                  | ✅               | ✅                   | ❌        | ✅        |
-| [**JavaScriptCore**][jsc] | `javascriptcore` or `jsc` | ✅                  | ✅ <sup>\*</sup> | ✅ <sup>\*</sup>     | ✅        | ✅        |
-| [**SpiderMonkey**][sm]    | `spidermonkey` or `sm`    | ✅                  | ✅               | ✅                   | ✅        | ✅        |
-| [**V8**][v8]              | `v8`                      | ✅                  | ✅               | ✅                   | ✅        | ✅        |
-| [**V8 debug**][v8]        | `v8-debug`                | ✅                  | ✅               | ✅                   | ✅        | ✅        |
-| [**XS**][xs]              | `xs`                      | ✅ <sup>(32)</sup>  | ✅               | ✅ <sup>(32)</sup>   | ✅        | ✅        |
+| JavaScript engine         | Binary name               | `mac64`            | `win32`          | `win64`            | `linux32` | `linux64` |
+| ------------------------- | ------------------------- | ------------------ | ---------------- | ------------------ | --------- | --------- |
+| [**Chakra**][ch]          | `chakra` or `ch`          | ✅                 | ✅               | ✅                 | ❌        | ✅        |
+| [**Hermes**][hermes]      | `hermes` & `hermes-repl`  | ✅                 | ❌               | ✅                 | ❌        | ✅        |
+| [**JavaScriptCore**][jsc] | `javascriptcore` or `jsc` | ✅                 | ✅ <sup>\*</sup> | ✅ <sup>\*</sup>   | ✅        | ✅        |
+| [**QuickJS**][quickjs]    | `quickjs`                 | ❌                 | ❌               | ❌                 | ❌        | ✅        |
+| [**SpiderMonkey**][sm]    | `spidermonkey` or `sm`    | ✅                 | ✅               | ✅                 | ✅        | ✅        |
+| [**V8**][v8]              | `v8`                      | ✅                 | ✅               | ✅                 | ✅        | ✅        |
+| [**V8 debug**][v8]        | `v8-debug`                | ✅                 | ✅               | ✅                 | ✅        | ✅        |
+| [**XS**][xs]              | `xs`                      | ✅ <sup>(32)</sup> | ✅               | ✅ <sup>(32)</sup> | ✅        | ✅        |
 
 <sup>\*</sup> JavaScriptCore requires external dependencies to run on Windows:
 - On 32-bit Windows, install [iTunes](https://www.apple.com/itunes/download/).
 - On 64-bit Windows, download the latest [WinCairoRequirements](https://github.com/WebKitForWindows/WinCairoRequirements/releases) and add its `bin64` directory to your `PATH`.
 
 [ch]: https://github.com/Microsoft/ChakraCore/issues/2278#issuecomment-277301120
-[sm]: https://bugzilla.mozilla.org/show_bug.cgi?id=1336514
+[hermes]: https://github.com/facebook/hermes/issues/17
 [jsc]: https://bugs.webkit.org/show_bug.cgi?id=179945
+[quickjs]: https://github.com/GoogleChromeLabs/jsvu/issues/73
+[sm]: https://bugzilla.mozilla.org/show_bug.cgi?id=1336514
 [v8]: https://bugs.chromium.org/p/chromium/issues/detail?id=936383
 [xs]: https://github.com/Moddable-OpenSource/moddable-xst
 
-## Integration with eshost-cli
+## Integration with `eshost-cli`
 
-[eshost-cli](https://github.com/bterlson/eshost-cli) makes it easy to run and compare code in all JavaScript engines that _jsvu_ installs.
+[`eshost-cli`](https://github.com/bterlson/eshost-cli) makes it easy to run and compare code in all JavaScript engines that `jsvu` installs.
 
-First, install eshost-cli:
+First, install `eshost-cli`:
 
 ```sh
 npm install -g eshost-cli
 ```
 
-Then, tell eshost-cli where _jsvu_ installs each JavaScript engine.
+Then, either automatically configure `jsvu`-installed hosts:
+
+```sh
+eshost --configure-jsvu
+```
+
+…or tell `eshost-cli` where `jsvu` installs each JavaScript engine following the instructions below.
 
 ### Linux/Mac
 
 ```sh
 eshost --add 'Chakra' ch ~/.jsvu/chakra
 eshost --add 'JavaScriptCore' jsc ~/.jsvu/javascriptcore
+eshost --add 'QuickJS' qjs ~/.jsvu/quickjs
 eshost --add 'SpiderMonkey' jsshell ~/.jsvu/spidermonkey
 eshost --add 'V8 --harmony' d8 ~/.jsvu/v8 --args '--harmony'
 eshost --add 'V8' d8 ~/.jsvu/v8
@@ -106,10 +117,12 @@ On your personal devices, the only command you’ll ever need is `jsvu` as descr
 However, there are use cases for running jsvu within non-interactive environments (e.g. as part of continuous integration), where it’s desirable to bypass the initial `jsvu` prompt asking to confirm your operating system, architecture, and the list of JavaScript engines to install. Here’s how to do that:
 
 ```sh
-jsvu --os=mac64 --engines=all
+jsvu --os=linux64 --engines=all
 # Equivalent to:
-jsvu --os=mac64 --engines=chakra,javascriptcore,spidermonkey,v8,xs
+jsvu --os=linux64 --engines=chakra,hermes,javascriptcore,quickjs,spidermonkey,v8,xs
 ```
+
+If the operating system and architecture are not known in advance, the `--os=default` flag attempts to guess the correct value from the running environment. This might not be right for example if running a 32-bit Node.js process on a 64-bit machine.
 
 Note that `--engines=all` does not install the `v8-debug` binaries.
 
@@ -127,7 +140,9 @@ This feature works for all the supported engines:
 
 ```sh
 jsvu chakra@1.11.6
+jsvu hermes@0.1.0
 jsvu javascriptcore@242640
+jsvu quickjs@2019-08-18
 jsvu spidermonkey@66.0b13
 jsvu v8@7.2.502
 jsvu v8-debug@7.1.302

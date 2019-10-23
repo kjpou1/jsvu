@@ -1,6 +1,6 @@
 {
 	"name": "jsvu",
-	"version": "1.7.1",
+	"version": "1.10.0",
 	"description": "JavaScript (engine) Version Updater",
 	"homepage": "https://github.com/GoogleChromeLabs/jsvu",
 	"repository": {
@@ -22,11 +22,11 @@
 	},
 	"scripts": {
 		"test": "echo 'Use `npm run test-$os` where `$os` reflects your system.'; echo 'See `npm run` for the full list.' && exit 1",
-		"test-mac64": "npm link; jsvu --os=mac64 --engines=all && echo '{\"os\":\"mac64\",\"engines\":[\"chakra\",\"javascriptcore\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu",
+		"test-mac64": "npm link; jsvu --os=mac64 --engines=all && echo '{\"os\":\"mac64\",\"engines\":[\"chakra\",\"hermes\",\"javascriptcore\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu",
 		"test-linux32": "npm link; jsvu --os=linux32 --engines=all && echo '{\"os\":\"linux32\",\"engines\":[\"chakra\",\"javascriptcore\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu",
-		"test-linux64": "npm link; jsvu --os=linux64 --engines=all && echo '{\"os\":\"linux64\",\"engines\":[\"chakra\",\"javascriptcore\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu",
+		"test-linux64": "npm link; jsvu --os=linux64 --engines=all && echo '{\"os\":\"linux64\",\"engines\":[\"chakra\",\"hermes\",\"javascriptcore\",\"quickjs\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu",
 		"test-win32": "npm link; jsvu --os=win32 --engines=all && echo '{\"os\":\"win32\",\"engines\":[\"chakra\",\"javascriptcore\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu",
-		"test-win64": "npm link; jsvu --os=win64 --engines=all && jsvu && echo '{\"os\":\"win64\",\"engines\":[\"chakra\",\"javascriptcore\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu"
+		"test-win64": "npm link; jsvu --os=win64 --engines=all && jsvu && echo '{\"os\":\"win64\",\"engines\":[\"chakra\",\"hermes\",\"javascriptcore\",\"spidermonkey\",\"v8\"],\"chakra\":\"0\",\"javascriptcore\":\"0\",\"spidermonkey\":\"0\",\"v8\":\"0\"}' > ~/.jsvu/status.json && jsvu"
 	},
 	"author": {
 		"name": "Mathias Bynens",
@@ -45,18 +45,18 @@
 	],
 	"dependencies": {
 		"chalk": "^2.4.2",
-		"execa": "^1.0.0",
+		"execa": "^2.0.4",
 		"extract-zip": "^1.6.7",
-		"fs-extra": "^7.0.1",
-		"glob": "^7.1.3",
+		"fs-extra": "^8.1.0",
+		"glob": "^7.1.4",
 		"got": "^9.6.0",
-		"inquirer": "^6.2.2",
+		"inquirer": "^6.5.1",
 		"mkdirp": "^0.5.1",
 		"progress": "^2.0.3",
-		"tar": "^4.4.8",
-		"tempy": "^0.2.1",
-		"tildify": "^1.2.0",
-		"untildify": "^3.0.3",
-		"update-notifier": "^2.5.0"
+		"tar": "^4.4.10",
+		"tempy": "^0.3.0",
+		"tildify": "^2.0.0",
+		"untildify": "^4.0.0",
+		"update-notifier": "^3.0.1"
 	}
 }
